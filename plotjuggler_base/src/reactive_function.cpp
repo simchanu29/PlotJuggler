@@ -12,6 +12,7 @@ void ReactiveLuaFunction::init()
 
   _lua_engine.open_libraries(sol::lib::base);
   _lua_engine.open_libraries(sol::lib::string);
+  _lua_engine.open_libraries(sol::lib::math);
 
   _lua_engine.script(_library_code);
 
