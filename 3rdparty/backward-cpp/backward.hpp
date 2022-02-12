@@ -86,6 +86,7 @@
 #include <vector>
 
 #include "sentry.h"
+extern bool __plotjuggler__sentry__active__;
 
 #if defined(BACKWARD_SYSTEM_LINUX)
 
@@ -3835,7 +3836,14 @@ private:
   void print_source_loc(std::ostream &os, const char *indent,
                         const ResolvedTrace::SourceLoc &source_loc,
                         void *addr = nullptr) {
-    os << indent << "Source \"" << source_loc.filename << "\", line "
+    // removing part of the path for extra privacy
+    std::string stripped_filename = source_loc.filename;
+    auto pos = source_loc.filename.find("/PlotJuggler/");
+    if( pos != std::string::npos )
+    {
+      stripped_filename = source_loc.filename.substr(pos, source_loc.filename.size()-pos);
+    }
+    os << indent << "Source \"" << stripped_filename << "\", line "
        << source_loc.line << ", in " << source_loc.function;
 
     if (address && addr != nullptr) {
@@ -3956,27 +3964,33 @@ public:
     }
 
     Printer printer;
-    printer.address = true;
-    printer.inliner_context_size = 1;
+    printer.address = false;
+    printer.trace_context_size = 3;
     printer.print(st, stderr);
 
-    std::stringstream ss;
-    printer.print(st, ss);
+    if(__plotjuggler__sentry__active__)
+    {
+      std::stringstream ss;
+      printer.print(st, ss);
 
-    sentry_value_t exc = sentry_value_new_object();
-    sentry_value_set_by_key(exc, "type", sentry_value_new_string("Exception"));
-    sentry_value_set_by_key(exc, "value", sentry_value_new_string(ss.str().c_str()));
+      sentry_value_t exc = sentry_value_new_object();
+      sentry_value_set_by_key(exc, "type", sentry_value_new_string("Exception"));
+      sentry_value_set_by_key(exc, "value", sentry_value_new_string(ss.str().c_str()));
 
-    sentry_value_t exceptions = sentry_value_new_object();
-    sentry_value_t values = sentry_value_new_list();
+      sentry_value_t exceptions = sentry_value_new_object();
+      sentry_value_t values = sentry_value_new_list();
 
-    sentry_value_set_by_key(exceptions, "values", values);
-    sentry_value_append(values, exc);
+      sentry_value_set_by_key(exceptions, "values", values);
+      sentry_value_append(values, exc);
 
-    sentry_value_t event = sentry_value_new_event();
-    sentry_value_set_by_key(event, "exception", exceptions);
+      sentry_value_t event = sentry_value_new_event();
+      sentry_value_set_by_key(event, "exception", exceptions);
 
-    sentry_capture_event(event);
+      sentry_capture_event(event);
+      std::cout << "\n IMPORTANT: an error report has been submitted.\n"
+                   "This report is completely anonymous, but if you want to disable it, "
+                   "change File->Settings..." << std::endl;
+    }
 
 #if _XOPEN_SOURCE >= 700 || _POSIX_C_SOURCE >= 200809L
     psiginfo(info, nullptr);

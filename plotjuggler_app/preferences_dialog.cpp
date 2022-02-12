@@ -24,6 +24,10 @@ PreferencesDialog::PreferencesDialog(QWidget* parent)
       settings.value("Preferences::use_plot_color_index", false).toBool();
   bool remember_color = settings.value("Preferences::remember_color", true).toBool();
 
+  bool enable_report = settings.value("Preferences::enable_sentry", true).toBool();
+
+  ui->checkBoxErrorReport->setChecked(enable_report);
+
   ui->checkBoxRememberColor->setChecked(remember_color);
   ui->radioLocalColorIndex->setChecked(use_plot_color_index);
   ui->radioGlobalColorIndex->setChecked(!use_plot_color_index);
@@ -76,6 +80,8 @@ void PreferencesDialog::on_buttonBox_accepted()
                     ui->radioLocalColorIndex->isChecked());
   settings.setValue("Preferences::use_separator", ui->checkBoxSeparator->isChecked());
   settings.setValue("Preferences::use_opengl", ui->checkBoxOpenGL->isChecked());
+
+  settings.setValue("Preferences::enable_sentry", ui->checkBoxErrorReport->isChecked());
 
   QStringList plugin_folders;
   for (int row = 0; row < ui->listWidgetCustom->count(); row++)
