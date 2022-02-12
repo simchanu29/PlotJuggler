@@ -12,6 +12,8 @@
 #include <QJsonDocument>
 #include <QDir>
 
+#include "sentry.h"
+
 #include "PlotJuggler/transform_function.h"
 #include "transforms/first_derivative.h"
 #include "transforms/scale_transform.h"
@@ -315,6 +317,26 @@ int main(int argc, char* argv[])
                       "latest"));
   manager.get(request);
 
+  // Dear user. I am not trying to spy on you or violate your privacy!!!
+  // Unfortunately my user are experiencing too many crashes and I have no time to do
+  // proper quality control. I am trying to use Sentry to record these issues.
+
+  QString sentry_release = QString("plotjuggler@%1").arg(VERSION_STRING);
+
+  sentry_options_t *options = sentry_options_new();
+  sentry_options_set_dsn(options, "https://91b9ff20fb5f4dd09d411eba92125d6a@o1142252.ingest.sentry.io/6201184");
+  sentry_options_set_release(options, sentry_release.toStdString().c_str());
+
+  sentry_options_set_symbolize_stacktraces(options, true);
+  sentry_options_set_system_crash_reporter_enabled(options, true);
+
+#ifndef Q_WS_WIN
+  // disable this to allow backtrace_cpp to intercet the crash
+  sentry_options_set_system_crash_reporter_enabled(options, false);
+#endif
+
+  sentry_init(options);
+
   MainWindow* w = nullptr;
 
   /*
@@ -385,5 +407,7 @@ int main(int argc, char* argv[])
     w->on_buttonStreamingStart_clicked();
   }
 
-  return app.exec();
+  auto ret = app.exec();
+  sentry_close();
+  return ret;
 }

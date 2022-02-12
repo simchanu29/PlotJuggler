@@ -85,6 +85,8 @@
 #include <string>
 #include <vector>
 
+#include "sentry.h"
+
 #if defined(BACKWARD_SYSTEM_LINUX)
 
 // On linux, backtrace can back-trace or "walk" the stack using the following
@@ -3955,7 +3957,26 @@ public:
 
     Printer printer;
     printer.address = true;
+    printer.inliner_context_size = 1;
     printer.print(st, stderr);
+
+    std::stringstream ss;
+    printer.print(st, ss);
+
+    sentry_value_t exc = sentry_value_new_object();
+    sentry_value_set_by_key(exc, "type", sentry_value_new_string("Exception"));
+    sentry_value_set_by_key(exc, "value", sentry_value_new_string(ss.str().c_str()));
+
+    sentry_value_t exceptions = sentry_value_new_object();
+    sentry_value_t values = sentry_value_new_list();
+
+    sentry_value_set_by_key(exceptions, "values", values);
+    sentry_value_append(values, exc);
+
+    sentry_value_t event = sentry_value_new_event();
+    sentry_value_set_by_key(event, "exception", exceptions);
+
+    sentry_capture_event(event);
 
 #if _XOPEN_SOURCE >= 700 || _POSIX_C_SOURCE >= 200809L
     psiginfo(info, nullptr);

@@ -143,6 +143,7 @@ include_directories(
     ./3rdparty/qwt/src
     ./3rdparty/sol
     ./3rdparty/lua-5.4.3/src
+    ./3rdparty/sentry/include
 )
 
 #########################  BASE library  ####################################
@@ -213,7 +214,6 @@ install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/plotjuggler.svg
 
 add_subdirectory( 3rdparty/qwt/src )
 
-
 install(
      TARGETS
         plotjuggler_base
@@ -234,6 +234,8 @@ endif()
 add_subdirectory( 3rdparty/color_widgets )
 add_subdirectory( 3rdparty/Qt-Advanced-Docking )
 add_subdirectory( 3rdparty/lua-5.4.3 )
+add_subdirectory( 3rdparty/sentry )
+
 
 add_subdirectory( plotjuggler_app )
 

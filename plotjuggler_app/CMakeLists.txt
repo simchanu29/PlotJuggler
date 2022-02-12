@@ -101,6 +101,7 @@ target_link_libraries(plotjuggler
     qt_advanced_docking
     plotjuggler_base
     plotjuggler_qwt
+    sentry
     )
 
 if(COMPILING_WITH_CATKIN)
