@@ -22,6 +22,7 @@
 #include "transforms/moving_rms.h"
 #include "transforms/outlier_removal.h"
 #include "transforms/integral_transform.h"
+#include "transforms/absolute_transform.h"
 
 #include "nlohmann_parsers.h"
 #include "new_release_dialog.h"
@@ -186,6 +187,7 @@ int main(int argc, char* argv[])
   TransformFactory::registerTransform<MovingRMS>();
   TransformFactory::registerTransform<OutlierRemovalFilter>();
   TransformFactory::registerTransform<IntegralTransform>();
+  TransformFactory::registerTransform<AbsoluteTransform>();
   //---------------------------
 
   QCommandLineParser parser;
