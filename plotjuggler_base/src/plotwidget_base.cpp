@@ -683,6 +683,10 @@ void PlotWidgetBase::setStyle(QwtPlotCurve* curve, CurveStyle style)
     case LINES_AND_DOTS:
       curve->setStyle(QwtPlotCurve::LinesAndDots);
       break;
+    case STEPS:
+      curve->setStyle(QwtPlotCurve::Steps);
+      curve->setCurveAttribute(QwtPlotCurve::Inverted);
+      break;
     case DOTS:
       curve->setStyle(QwtPlotCurve::Dots);
       break;

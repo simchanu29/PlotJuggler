@@ -628,6 +628,10 @@ QDomElement PlotWidget::xmlSaveState(QDomDocument& doc) const
   {
     plot_el.setAttribute("style", "LinesAndDots");
   }
+  else if (curveStyle() == PlotWidgetBase::STEPS)
+  {
+    plot_el.setAttribute("style", "Steps");
+  }
   else if (curveStyle() == PlotWidgetBase::DOTS)
   {
     plot_el.setAttribute("style", "Dots");
@@ -822,6 +826,10 @@ bool PlotWidget::xmlLoadState(QDomElement& plot_widget)
     else if (style == "LinesAndDots")
     {
       changeCurvesStyle(PlotWidgetBase::LINES_AND_DOTS);
+    }
+    else if (style == "Steps")
+    {
+      changeCurvesStyle(PlotWidgetBase::STEPS);
     }
     else if (style == "Dots")
     {

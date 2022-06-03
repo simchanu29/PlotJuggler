@@ -58,6 +58,8 @@ private slots:
 
   void on_radioPoints_toggled(bool checked);
 
+  void on_radioSteps_toggled(bool checked);
+
   void on_radioBoth_toggled(bool checked);
 
   void on_checkBoxMax_toggled(bool checked);

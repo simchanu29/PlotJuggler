@@ -26,6 +26,7 @@ public:
     LINES,
     DOTS,
     LINES_AND_DOTS,
+    STEPS,
     STICKS
   };
 

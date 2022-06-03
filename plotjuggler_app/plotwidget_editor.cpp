@@ -294,6 +294,14 @@ void PlotwidgetEditor::on_radioBoth_toggled(bool checked)
   }
 }
 
+void PlotwidgetEditor::on_radioSteps_toggled(bool checked)
+{
+  if (checked)
+  {
+    _plotwidget->changeCurvesStyle(PlotWidgetBase::STEPS);
+  }
+}
+
 void PlotwidgetEditor::on_radioSticks_toggled(bool checked)
 {
   if (checked)

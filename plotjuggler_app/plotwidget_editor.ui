@@ -325,6 +325,16 @@
              </widget>
             </item>
             <item>
+             <widget class="QRadioButton" name="radioSteps">
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string>Steps</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <widget class="QRadioButton" name="radioBoth">
               <property name="focusPolicy">
                <enum>Qt::NoFocus</enum>
