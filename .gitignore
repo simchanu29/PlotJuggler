@@ -45,3 +45,8 @@ cmake-build-*
 installer/io.plotjuggler.application/data
 *.pyc
 *.swp
+
+# Vscode
+.vscode
+log/
+logs/
